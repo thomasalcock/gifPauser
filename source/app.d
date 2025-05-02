@@ -57,11 +57,11 @@ void main()
 			}
 		}
 
-		if (IsKeyPressed(KeyboardKey.KEY_RIGHT))
+		if (IsKeyPressed(KeyboardKey.KEY_DOWN))
 		{
 			frameDelay++;
 		}
-		else if (IsKeyPressed(KeyboardKey.KEY_LEFT))
+		else if (IsKeyPressed(KeyboardKey.KEY_UP))
 		{
 			frameDelay--;
 		}
@@ -75,10 +75,6 @@ void main()
 			frameDelay = MIN_FRAME_DELAY;
 		}
 
-		// BeginTextureMode(renderTexture);
-		// ClearBackground(Colors.RAYWHITE);
-		// EndTextureMode();
-
 		BeginDrawing();
 
 		ClearBackground(Colors.RAYWHITE);
@@ -91,7 +87,12 @@ void main()
 		}
 		else
 		{
-			DrawText("Drag and drop a .gif file onto the screen!", 100, 100, 30, Colors.GRAY);
+
+			DrawText("Drag and drop a .gif file onto the screen!", 100, 100, 20, Colors.GRAY);
+			DrawText("Play the gif faster / slower by hitting up / down!", 100, 150, 20, Colors
+					.GRAY);
+			DrawText("Play / pause by hitting the spacebar!", 100, 200, 20, Colors
+					.GRAY);
 		}
 		EndDrawing();
 	}
