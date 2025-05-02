@@ -2,17 +2,12 @@ import std.stdio;
 import std.conv;
 import raylib;
 
-// TODO: resize gifs
-// TODO: dark mode
 void main()
 {
-	const int screenWidth = 1024;
-	const int screenHeight = 768;
+	const int screenWidth = 800;
+	const int screenHeight = 600;
 	const int MAX_FRAME_DELAY = 20;
 	const int MIN_FRAME_DELAY = 1;
-	// const int MAX_FILEPATH_RECORDED = 4096;
-	//const int MAX_FILEPATH_SIZE = 2048;
-	//char*[MAX_FILEPATH_SIZE] filePath;
 	Image imScarfyAnim;
 	Texture2D texture;
 
@@ -25,7 +20,7 @@ void main()
 	int frameCounter = 0;
 	bool updateTexture = true;
 
-	InitWindow(screenWidth, screenHeight, "gifPlayer");
+	InitWindow(screenWidth, screenHeight, "gifPauser");
 	SetTargetFPS(60);
 
 	while (!WindowShouldClose())
@@ -80,24 +75,19 @@ void main()
 			frameDelay = MIN_FRAME_DELAY;
 		}
 
+		// BeginTextureMode(renderTexture);
+		// ClearBackground(Colors.RAYWHITE);
+		// EndTextureMode();
+
 		BeginDrawing();
 
 		ClearBackground(Colors.RAYWHITE);
+		Rectangle source = Rectangle(0, 0, cast(float) texture.width, cast(float) texture.height);
+		Rectangle dest = Rectangle(0, 0, cast(float) screenWidth, cast(float) screenHeight);
 
 		if (fileCounter > 0)
 		{
-			// DrawText(TextFormat("TOTAL GIF FRAMES:  %02i", animFrames), 50, 30, 20, Colors.GRAY);
-			// DrawText(TextFormat("CURRENT FRAME: %02i", currentAnimFrame), 50, 60, 20, Colors.GRAY);
-			// DrawText(TextFormat("CURRENT FRAME IMAGE.DATA OFFSET: %02i",
-			// 		nextFrameDataOffset), 50, 90, 20, Colors.GRAY);
-			DrawText("FRAMES DELAY: ", 100, 500, 10, Colors.DARKGRAY);
-			DrawText(TextFormat("%02i frames", frameDelay), 620, 450, 10, Colors.DARKGRAY);
-			DrawText("PRESS RIGHT/LEFT KEYS to CHANGE SPEED!", 290, 500, 10, Colors.DARKGRAY);
-
-			{
-				DrawTexture(texture, GetScreenWidth() / 2 - texture.width / 2, 140, Colors.WHITE);
-			}
-
+			DrawTexturePro(texture, source, dest, Vector2(0, 0), 0.0f, Colors.WHITE);
 		}
 		else
 		{
