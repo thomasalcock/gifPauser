@@ -8,12 +8,12 @@ void main()
 	const int screenHeight = 600;
 	const int MAX_FRAME_DELAY = 20;
 	const int MIN_FRAME_DELAY = 1;
-	Image imScarfyAnim;
+	Image image;
 	Texture2D texture;
 
 	bool fileDropped = false;
 	int fileCounter = 0;
-	int animFrames = 0;
+	int totalFrames = 0;
 	uint nextFrameDataOffset = 0;
 	int currentAnimFrame = 0;
 	int frameDelay = 8;
@@ -31,8 +31,8 @@ void main()
 			fileCounter++;
 			FilePathList droppedFile = LoadDroppedFiles();
 			char* filePath = droppedFile.paths[0];
-			imScarfyAnim = LoadImageAnim(filePath, &animFrames);
-			texture = LoadTextureFromImage(imScarfyAnim);
+			image = LoadImageAnim(filePath, &totalFrames);
+			texture = LoadTextureFromImage(image);
 			UnloadDroppedFiles(droppedFile);
 		}
 
@@ -47,12 +47,12 @@ void main()
 			if (frameCounter >= frameDelay)
 			{
 				currentAnimFrame++;
-				if (currentAnimFrame >= animFrames)
+				if (currentAnimFrame >= totalFrames)
 				{
 					currentAnimFrame = 0;
 				}
-				nextFrameDataOffset = imScarfyAnim.width * imScarfyAnim.height * 4 * currentAnimFrame;
-				UpdateTexture(texture, (imScarfyAnim.data) + nextFrameDataOffset);
+				nextFrameDataOffset = image.width * image.height * 4 * currentAnimFrame;
+				UpdateTexture(texture, (image.data) + nextFrameDataOffset);
 				frameCounter = 0;
 			}
 		}
@@ -97,6 +97,6 @@ void main()
 		EndDrawing();
 	}
 	UnloadTexture(texture);
-	UnloadImage(imScarfyAnim);
+	UnloadImage(image);
 	CloseWindow();
 }
