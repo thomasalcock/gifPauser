@@ -1,0 +1,12 @@
+{
+    "libs" : ["raylib"], 
+    "lflags-posix" : ["-L."], 
+    "lflags-osx" : ["-rpath", "@executable_path/"], 
+    "lflags-linux" : ["-rpath=$$ORIGIN"], 
+    "description" : "Application to play, stop, rewind gifs", 
+    "name" : "gif-player", 
+    "dependencies" : {"raylib-d" : "~>5.5.1"}, 
+    "authors" : ["Thomas Alcock"], 
+    "copyright" : "Copyright © 2025, Thomas Alcock", 
+    "license" : "BSL-1.0"
+}
