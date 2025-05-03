@@ -24,6 +24,8 @@ void main()
 	int frameCounter = 0;
 	bool updateTexture = true;
 	bool reverse = false;
+	char* filePath;
+	int textFadeValue = 0;
 
 	InitWindow(screenWidth, screenHeight, "gifPauser");
 	SetTargetFPS(60);
@@ -33,7 +35,9 @@ void main()
 		fileDropped = IsFileDropped();
 		if (fileDropped)
 		{
-			loadTextureFromGif(fileCounter, totalFrames, image, texture);
+			writeln("reset text fade value");
+			textFadeValue = 255;
+			loadTextureFromGif(fileCounter, totalFrames, image, texture, filePath);
 		}
 
 		if (IsKeyPressed(KeyboardKey.KEY_SPACE))
@@ -62,6 +66,20 @@ void main()
 		if (fileCounter > 0)
 		{
 			DrawTexturePro(texture, source, dest, Vector2(0, 0), 0.0f, Colors.WHITE);
+			// TODO: store magic numbers in variables
+			if (frameCounter >= 7)
+			{
+				textFadeValue -= 25;
+			}
+			if (textFadeValue <= 10)
+			{
+				textFadeValue = 0;
+			}
+			writeln(textFadeValue);
+			DrawTextPro(GetFontDefault(), TextFormat("Loaded file %s", filePath),
+				Vector2(100, 100),
+				Vector2(0, 0),
+				0.0f, 50, 1, Color(0, 0, 0, cast(ubyte) textFadeValue)); //TODO: do arithmetic on ubyte to avoid cast
 		}
 		else
 		{

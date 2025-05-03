@@ -6,11 +6,12 @@ void loadTextureFromGif(
     ref int fileCounter,
     ref int totalFrames,
     ref Image image,
-    ref Texture texture)
+    ref Texture texture,
+    ref char* filePath)
 {
     fileCounter++;
     FilePathList droppedFile = LoadDroppedFiles();
-    char* filePath = droppedFile.paths[0];
+    filePath = droppedFile.paths[0];
     image = LoadImageAnim(filePath, &totalFrames);
     texture = LoadTextureFromImage(image);
     UnloadDroppedFiles(droppedFile);
