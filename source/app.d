@@ -67,6 +67,7 @@ void main()
 		{
 			DrawTexturePro(texture, source, dest, Vector2(0, 0), 0.0f, Colors.WHITE);
 			// TODO: store magic numbers in variables
+			// TODO: fix bug - text doesn't fade out when new gif if loaded after speed is changed
 			if (frameCounter >= 7)
 			{
 				textFadeValue -= 25;
@@ -75,11 +76,11 @@ void main()
 			{
 				textFadeValue = 0;
 			}
-			writeln(textFadeValue);
+			// TODO: show file name correctly
 			DrawTextPro(GetFontDefault(), TextFormat("Loaded file %s", filePath),
 				Vector2(100, 100),
 				Vector2(0, 0),
-				0.0f, 50, 1, Color(0, 0, 0, cast(ubyte) textFadeValue)); //TODO: do arithmetic on ubyte to avoid cast
+				0.0f, 50, 1, Color(255, 255, 255, cast(ubyte) textFadeValue)); //TODO: do arithmetic on ubyte to avoid cast
 		}
 		else
 		{
