@@ -19,6 +19,7 @@ void main()
 	int frameDelay = 8;
 	int frameCounter = 0;
 	bool updateTexture = true;
+	bool reverse = false;
 
 	InitWindow(screenWidth, screenHeight, "gifPauser");
 	SetTargetFPS(60);
@@ -40,16 +41,31 @@ void main()
 		{
 			updateTexture = !updateTexture;
 		}
+		if (IsKeyPressed(KeyboardKey.KEY_R))
+		{
+			reverse = !reverse;
+		}
 
 		if (updateTexture && fileCounter > 0)
 		{
 			frameCounter++;
 			if (frameCounter >= frameDelay)
 			{
-				currentAnimFrame++;
-				if (currentAnimFrame >= totalFrames)
+				if (reverse)
 				{
-					currentAnimFrame = 0;
+					currentAnimFrame--;
+					if (currentAnimFrame < 0)
+					{
+						currentAnimFrame = totalFrames - 1;
+					}
+				}
+				else
+				{
+					currentAnimFrame++;
+					if (currentAnimFrame >= totalFrames)
+					{
+						currentAnimFrame = 0;
+					}
 				}
 				nextFrameDataOffset = image.width * image.height * 4 * currentAnimFrame;
 				UpdateTexture(texture, (image.data) + nextFrameDataOffset);
@@ -77,7 +93,7 @@ void main()
 
 		BeginDrawing();
 
-		ClearBackground(Colors.RAYWHITE);
+		ClearBackground(Colors.DARKGRAY);
 		Rectangle source = Rectangle(0, 0, cast(float) texture.width, cast(float) texture.height);
 		Rectangle dest = Rectangle(0, 0, cast(float) screenWidth, cast(float) screenHeight);
 
@@ -88,11 +104,13 @@ void main()
 		else
 		{
 
-			DrawText("Drag and drop a .gif file onto the screen!", 100, 100, 20, Colors.GRAY);
-			DrawText("Play the gif faster / slower by hitting up / down!", 100, 150, 20, Colors
-					.GRAY);
-			DrawText("Play / pause by hitting the spacebar!", 100, 200, 20, Colors
-					.GRAY);
+			DrawText("Drag and drop a .gif file onto the screen", 100, 100, 20, Colors.RAYWHITE);
+			DrawText("Play the gif faster / slower by hitting up / down", 100, 150, 20, Colors
+					.RAYWHITE);
+			DrawText("Play / pause by hitting the spacebar", 100, 200, 20, Colors
+					.RAYWHITE);
+			DrawText("Reverse the gif by hitting the R key", 100, 250, 20, Colors
+					.RAYWHITE);
 		}
 		EndDrawing();
 	}
