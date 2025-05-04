@@ -53,6 +53,25 @@ void updateGifFrame(ref int frameCounter, ref int frameDelay, ref int currentAni
     }
 }
 
+void updateTextTransparency(
+    ref int someFrameCounter,
+    ref int textFadeValue,
+    const ref int frameDelay,
+    const ref int textFadeDelta,
+    const ref int textFadeThreshold
+)
+{
+    someFrameCounter++;
+    if (someFrameCounter >= frameDelay - 1)
+    {
+        textFadeValue -= textFadeDelta;
+    }
+    if (textFadeValue <= textFadeThreshold)
+    {
+        textFadeValue = 0;
+    }
+}
+
 void pauseGif(ref bool paused, ref bool updateTexture, ref int pauseTextFadeValue, ref int playTextFadeValue)
 {
     if (IsKeyPressed(KeyboardKey.KEY_SPACE))

@@ -5,6 +5,8 @@ import core.memory;
 import utils;
 
 // TODO: make window resizeable
+// TODO: allow user to iterate through single frames
+// TODO: allow user to save single file as 
 // TODO: display and fade out text / state when user changes input
 void main()
 {
@@ -19,7 +21,7 @@ void main()
 	int totalFrames = 0;
 	uint nextFrameDataOffset = 0;
 	int currentAnimFrame = 0;
-	int frameDelay = 5;
+	int frameDelay = 11;
 	int frameCounter = 0;
 	bool updateTexture = true;
 	bool reverse = false;
@@ -32,7 +34,8 @@ void main()
 	int pauseTextFadeValue = 0;
 	int pauseFrameCounter = 0;
 	int fileTextFadeValue = 0;
-	const int textFadeDelta = 15;
+
+	const int textFadeDelta = 20;
 	const int textFadeThreshold = 10;
 
 	InitWindow(screenWidth, screenHeight, "gifPauser");
@@ -70,15 +73,9 @@ void main()
 		if (fileCounter > 0)
 		{
 			DrawTexturePro(texture, source, dest, Vector2(0, 0), 0.0f, Colors.WHITE);
-			if (frameCounter >= frameDelay - 1)
-			{
-				fileTextFadeValue -= textFadeDelta;
-			}
-			if (fileTextFadeValue <= textFadeThreshold)
-			{
-				fileTextFadeValue = 0;
-			}
-			if (fileTextFadeValue > 0)
+			updateTextTransparency(frameCounter, fileTextFadeValue, frameDelay, textFadeDelta, textFadeThreshold);
+			if (
+				fileTextFadeValue > 0)
 			{
 				DrawTextPro(GetFontDefault(), TextFormat("Loaded file %s", filePathString),
 					Vector2(10, 10),
@@ -88,16 +85,9 @@ void main()
 			}
 			if (pause)
 			{
-				pauseFrameCounter++;
-				if (pauseFrameCounter >= frameDelay - 1)
-				{
-					pauseTextFadeValue -= textFadeDelta;
-				}
-				if (pauseTextFadeValue <= textFadeThreshold)
-				{
-					pauseTextFadeValue = 0;
-				}
-				if (pauseTextFadeValue > 0)
+				updateTextTransparency(pauseFrameCounter, pauseTextFadeValue, frameDelay, textFadeDelta, textFadeThreshold);
+				if (
+					pauseTextFadeValue > 0)
 				{
 					DrawTextPro(GetFontDefault(), "Paused",
 						Vector2(GetScreenWidth() - 100, 10),
@@ -107,15 +97,7 @@ void main()
 			}
 			else
 			{
-				playFrameCounter++;
-				if (playFrameCounter >= frameDelay - 1)
-				{
-					playTextFadeValue -= textFadeDelta;
-				}
-				if (playTextFadeValue <= textFadeThreshold)
-				{
-					playTextFadeValue = 0;
-				}
+				updateTextTransparency(playFrameCounter, playTextFadeValue, frameDelay, textFadeDelta, textFadeThreshold);
 				if (playTextFadeValue > 0)
 				{
 					DrawTextPro(GetFontDefault(), "Play",
