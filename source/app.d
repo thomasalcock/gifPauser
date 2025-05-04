@@ -27,7 +27,6 @@ void main()
 	char* filePath;
 	char* filePathString = cast(char*) GC.calloc(char.sizeof * 200);
 	int fileTextFadeValue = 0;
-	int pauseTextFadeValue = 0;
 	const int textFadeDelta = 15;
 	const int textFadeThreshold = 10;
 
@@ -90,6 +89,14 @@ void main()
 					Vector2(GetScreenWidth() - 100, 10),
 					Vector2(0, 0),
 					0.0f, 20, 1, Color(255, 255, 255, 255));
+			}
+			if (reverse)
+			{
+				DrawTextPro(GetFontDefault(), "Reverse",
+					Vector2(GetScreenWidth() - 100, 50),
+					Vector2(0, 0),
+					0.0f, 20, 1, Color(255, 255, 255, 255));
+
 			}
 		}
 		else
