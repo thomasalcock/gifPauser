@@ -1,17 +1,20 @@
 module utils;
 
 import raylib;
+import std.stdio;
 
 void loadTextureFromGif(
     ref int fileCounter,
     ref int totalFrames,
     ref Image image,
     ref Texture texture,
-    ref char* filePath)
+    ref char* filePath,
+    ref char* filePathString)
 {
     fileCounter++;
     FilePathList droppedFile = LoadDroppedFiles();
     filePath = droppedFile.paths[0];
+    TextCopy(filePathString, filePath);
     image = LoadImageAnim(filePath, &totalFrames);
     texture = LoadTextureFromImage(image);
     UnloadDroppedFiles(droppedFile);

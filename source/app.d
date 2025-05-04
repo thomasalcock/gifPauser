@@ -1,7 +1,7 @@
 import std.stdio;
 import std.conv;
 import raylib;
-
+import core.memory;
 import utils;
 
 // TODO: make window resizeable
@@ -14,7 +14,6 @@ void main()
 	const int MIN_FRAME_DELAY = 1;
 	Image image;
 	Texture2D texture;
-
 	bool fileDropped = false;
 	int fileCounter = 0;
 	int totalFrames = 0;
@@ -25,19 +24,19 @@ void main()
 	bool updateTexture = true;
 	bool reverse = false;
 	char* filePath;
+	char* filePathString = cast(char*) GC.calloc(char.sizeof * 200);
 	int textFadeValue = 0;
 
 	InitWindow(screenWidth, screenHeight, "gifPauser");
 	SetTargetFPS(60);
-
 	while (!WindowShouldClose())
 	{
 		fileDropped = IsFileDropped();
 		if (fileDropped)
 		{
-			writeln("reset text fade value");
 			textFadeValue = 255;
-			loadTextureFromGif(fileCounter, totalFrames, image, texture, filePath);
+			loadTextureFromGif(fileCounter, totalFrames, image,
+				texture, filePath, filePathString);
 		}
 
 		if (IsKeyPressed(KeyboardKey.KEY_SPACE))
@@ -58,10 +57,11 @@ void main()
 		changeGifSpeed(frameDelay, MIN_FRAME_DELAY, MAX_FRAME_DELAY);
 
 		BeginDrawing();
-
 		ClearBackground(Colors.DARKGRAY);
-		Rectangle source = Rectangle(0, 0, cast(float) texture.width, cast(float) texture.height);
-		Rectangle dest = Rectangle(0, 0, cast(float) GetScreenWidth(), cast(float) GetScreenHeight());
+		Rectangle source = Rectangle(0, 0, cast(float) texture.width, cast(
+				float) texture.height);
+		Rectangle dest = Rectangle(0, 0, cast(
+				float) GetScreenWidth(), cast(float) GetScreenHeight());
 
 		if (fileCounter > 0)
 		{
@@ -76,11 +76,15 @@ void main()
 			{
 				textFadeValue = 0;
 			}
-			// TODO: show file name correctly
-			DrawTextPro(GetFontDefault(), TextFormat("Loaded file %s", filePath),
-				Vector2(100, 100),
-				Vector2(0, 0),
-				0.0f, 50, 1, Color(255, 255, 255, cast(ubyte) textFadeValue)); //TODO: do arithmetic on ubyte to avoid cast
+			if (textFadeValue > 0)
+			{
+				// TODO: show file name correctly
+				DrawTextPro(GetFontDefault(), TextFormat("Loaded file %s", filePathString),
+					Vector2(100, 100),
+					Vector2(0, 0),
+					0.0f, 30, 1, Color(255, 255, 255, cast(ubyte) textFadeValue));
+				//TODO: do arithmetic on ubyte to avoid cast
+			}
 		}
 		else
 		{
@@ -88,6 +92,7 @@ void main()
 		}
 		EndDrawing();
 	}
+	GC.free(filePathString);
 	UnloadTexture(texture);
 	UnloadImage(image);
 	CloseWindow();
