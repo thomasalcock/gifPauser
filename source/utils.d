@@ -53,6 +53,15 @@ void updateGifFrame(ref int frameCounter, ref int frameDelay, ref int currentAni
     }
 }
 
+void pauseGif(ref bool paused, ref bool updateTexture)
+{
+    if (IsKeyPressed(KeyboardKey.KEY_SPACE))
+    {
+        paused = !paused;
+        updateTexture = !updateTexture;
+    }
+}
+
 void drawInstructions()
 {
     DrawText("Drag and drop a .gif file onto the screen", 100, 100, 20, Colors.RAYWHITE);

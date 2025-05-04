@@ -23,9 +23,11 @@ void main()
 	int frameCounter = 0;
 	bool updateTexture = true;
 	bool reverse = false;
+	bool pause = false;
 	char* filePath;
 	char* filePathString = cast(char*) GC.calloc(char.sizeof * 200);
-	int textFadeValue = 0;
+	int fileTextFadeValue = 0;
+	int pauseTextFadeValue = 0;
 	const int textFadeDelta = 15;
 	const int textFadeThreshold = 10;
 
@@ -36,15 +38,13 @@ void main()
 		fileDropped = IsFileDropped();
 		if (fileDropped)
 		{
-			textFadeValue = 255;
+			fileTextFadeValue = 255;
 			loadTextureFromGif(fileCounter, totalFrames, image,
 				texture, filePath, filePathString);
 		}
 
-		if (IsKeyPressed(KeyboardKey.KEY_SPACE))
-		{
-			updateTexture = !updateTexture;
-		}
+		pauseGif(pause, updateTexture);
+
 		if (IsKeyPressed(KeyboardKey.KEY_R))
 		{
 			reverse = !reverse;
@@ -70,19 +70,26 @@ void main()
 			DrawTexturePro(texture, source, dest, Vector2(0, 0), 0.0f, Colors.WHITE);
 			if (frameCounter >= frameDelay - 1)
 			{
-				textFadeValue -= textFadeDelta;
+				fileTextFadeValue -= textFadeDelta;
 			}
-			if (textFadeValue <= textFadeThreshold)
+			if (fileTextFadeValue <= textFadeThreshold)
 			{
-				textFadeValue = 0;
+				fileTextFadeValue = 0;
 			}
-			if (textFadeValue > 0)
+			if (fileTextFadeValue > 0)
 			{
 				DrawTextPro(GetFontDefault(), TextFormat("Loaded file %s", filePathString),
 					Vector2(10, 10),
 					Vector2(0, 0),
-					0.0f, 20, 1, Color(255, 255, 255, cast(ubyte) textFadeValue));
+					0.0f, 20, 1, Color(255, 255, 255, cast(ubyte) fileTextFadeValue));
 				//TODO: do arithmetic on ubyte to avoid cast
+			}
+			if (pause)
+			{
+				DrawTextPro(GetFontDefault(), "Paused",
+					Vector2(GetScreenWidth() - 100, 10),
+					Vector2(0, 0),
+					0.0f, 20, 1, Color(255, 255, 255, 255));
 			}
 		}
 		else
