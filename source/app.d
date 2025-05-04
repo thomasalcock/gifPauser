@@ -19,13 +19,16 @@ void main()
 	int totalFrames = 0;
 	uint nextFrameDataOffset = 0;
 	int currentAnimFrame = 0;
-	int frameDelay = 8;
+	int frameDelay = 5;
 	int frameCounter = 0;
 	bool updateTexture = true;
 	bool reverse = false;
 	bool pause = false;
 	char* filePath;
 	char* filePathString = cast(char*) GC.calloc(char.sizeof * 200);
+
+	int pauseTextFadeValue = 0;
+	int pauseFrameCounter = 0;
 	int fileTextFadeValue = 0;
 	const int textFadeDelta = 15;
 	const int textFadeThreshold = 10;
@@ -42,7 +45,7 @@ void main()
 				texture, filePath, filePathString);
 		}
 
-		pauseGif(pause, updateTexture);
+		pauseGif(pause, updateTexture, pauseTextFadeValue);
 
 		if (IsKeyPressed(KeyboardKey.KEY_R))
 		{
@@ -85,11 +88,24 @@ void main()
 			}
 			if (pause)
 			{
-				DrawTextPro(GetFontDefault(), "Paused",
-					Vector2(GetScreenWidth() - 100, 10),
-					Vector2(0, 0),
-					0.0f, 20, 1, Color(255, 255, 255, 255));
+				pauseFrameCounter++;
+				if (pauseFrameCounter >= frameDelay - 1)
+				{
+					pauseTextFadeValue -= textFadeDelta;
+				}
+				if (pauseTextFadeValue <= textFadeThreshold)
+				{
+					pauseTextFadeValue = 0;
+				}
+				if (pauseTextFadeValue > 0)
+				{
+					DrawTextPro(GetFontDefault(), "Paused",
+						Vector2(GetScreenWidth() - 100, 10),
+						Vector2(0, 0),
+						0.0f, 20, 1, Color(255, 255, 255, cast(ubyte) pauseTextFadeValue));
+				}
 			}
+
 			if (reverse)
 			{
 				DrawTextPro(GetFontDefault(), "Reverse",
