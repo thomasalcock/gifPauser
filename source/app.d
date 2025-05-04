@@ -26,6 +26,8 @@ void main()
 	char* filePath;
 	char* filePathString = cast(char*) GC.calloc(char.sizeof * 200);
 	int textFadeValue = 0;
+	const int textFadeDelta = 15;
+	const int textFadeThreshold = 10;
 
 	InitWindow(screenWidth, screenHeight, "gifPauser");
 	SetTargetFPS(60);
@@ -66,23 +68,20 @@ void main()
 		if (fileCounter > 0)
 		{
 			DrawTexturePro(texture, source, dest, Vector2(0, 0), 0.0f, Colors.WHITE);
-			// TODO: store magic numbers in variables
-			// TODO: fix bug - text doesn't fade out when new gif if loaded after speed is changed
-			if (frameCounter >= 7)
+			if (frameCounter >= frameDelay - 1)
 			{
-				textFadeValue -= 25;
+				textFadeValue -= textFadeDelta;
 			}
-			if (textFadeValue <= 10)
+			if (textFadeValue <= textFadeThreshold)
 			{
 				textFadeValue = 0;
 			}
 			if (textFadeValue > 0)
 			{
-				// TODO: show file name correctly
 				DrawTextPro(GetFontDefault(), TextFormat("Loaded file %s", filePathString),
-					Vector2(100, 100),
+					Vector2(10, 10),
 					Vector2(0, 0),
-					0.0f, 30, 1, Color(255, 255, 255, cast(ubyte) textFadeValue));
+					0.0f, 20, 1, Color(255, 255, 255, cast(ubyte) textFadeValue));
 				//TODO: do arithmetic on ubyte to avoid cast
 			}
 		}
