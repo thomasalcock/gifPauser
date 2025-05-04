@@ -53,13 +53,22 @@ void updateGifFrame(ref int frameCounter, ref int frameDelay, ref int currentAni
     }
 }
 
-void pauseGif(ref bool paused, ref bool updateTexture, ref int pauseTextFadeValue)
+void pauseGif(ref bool paused, ref bool updateTexture, ref int pauseTextFadeValue, ref int playTextFadeValue)
 {
     if (IsKeyPressed(KeyboardKey.KEY_SPACE))
     {
-        pauseTextFadeValue = 255;
         paused = !paused;
         updateTexture = !updateTexture;
+        if (paused)
+        {
+            pauseTextFadeValue = 255;
+            playTextFadeValue = 0;
+        }
+        else
+        {
+            pauseTextFadeValue = 0;
+            playTextFadeValue = 255;
+        }
     }
 }
 

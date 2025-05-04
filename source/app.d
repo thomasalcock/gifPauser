@@ -27,6 +27,8 @@ void main()
 	char* filePath;
 	char* filePathString = cast(char*) GC.calloc(char.sizeof * 200);
 
+	int playFrameCounter = 0;
+	int playTextFadeValue = 0;
 	int pauseTextFadeValue = 0;
 	int pauseFrameCounter = 0;
 	int fileTextFadeValue = 0;
@@ -45,7 +47,7 @@ void main()
 				texture, filePath, filePathString);
 		}
 
-		pauseGif(pause, updateTexture, pauseTextFadeValue);
+		pauseGif(pause, updateTexture, pauseTextFadeValue, playTextFadeValue);
 
 		if (IsKeyPressed(KeyboardKey.KEY_R))
 		{
@@ -62,10 +64,8 @@ void main()
 
 		BeginDrawing();
 		ClearBackground(Colors.DARKGRAY);
-		Rectangle source = Rectangle(0, 0, cast(float) texture.width, cast(
-				float) texture.height);
-		Rectangle dest = Rectangle(0, 0, cast(
-				float) GetScreenWidth(), cast(float) GetScreenHeight());
+		Rectangle source = Rectangle(0, 0, cast(float) texture.width, cast(float) texture.height);
+		Rectangle dest = Rectangle(0, 0, cast(float) GetScreenWidth(), cast(float) GetScreenHeight());
 
 		if (fileCounter > 0)
 		{
@@ -105,6 +105,25 @@ void main()
 						0.0f, 20, 1, Color(255, 255, 255, cast(ubyte) pauseTextFadeValue));
 				}
 			}
+			else
+			{
+				playFrameCounter++;
+				if (playFrameCounter >= frameDelay - 1)
+				{
+					playTextFadeValue -= textFadeDelta;
+				}
+				if (playTextFadeValue <= textFadeThreshold)
+				{
+					playTextFadeValue = 0;
+				}
+				if (playTextFadeValue > 0)
+				{
+					DrawTextPro(GetFontDefault(), "Play",
+						Vector2(GetScreenWidth() - 100, 10),
+						Vector2(0, 0),
+						0.0f, 20, 1, Color(255, 255, 255, cast(ubyte) playTextFadeValue));
+				}
+			}
 
 			if (reverse)
 			{
@@ -112,7 +131,6 @@ void main()
 					Vector2(GetScreenWidth() - 100, 50),
 					Vector2(0, 0),
 					0.0f, 20, 1, Color(255, 255, 255, 255));
-
 			}
 		}
 		else
