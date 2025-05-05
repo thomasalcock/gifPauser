@@ -72,7 +72,11 @@ void updateTextTransparency(
     }
 }
 
-void pauseGif(ref bool paused, ref bool updateTexture, ref int pauseTextFadeValue, ref int playTextFadeValue)
+void pauseGif(ref bool paused,
+    ref bool play,
+    ref bool updateTexture,
+    ref int pauseTextFadeValue,
+    ref int playTextFadeValue)
 {
     if (IsKeyPressed(KeyboardKey.KEY_SPACE))
     {
@@ -82,9 +86,11 @@ void pauseGif(ref bool paused, ref bool updateTexture, ref int pauseTextFadeValu
         {
             pauseTextFadeValue = 255;
             playTextFadeValue = 0;
+            play = false;
         }
         else
         {
+            play = true;
             pauseTextFadeValue = 0;
             playTextFadeValue = 255;
         }
@@ -135,4 +141,29 @@ void changeGifSpeed(ref int frameDelay,
         frameDelay = MIN_FRAME_DELAY;
     }
 
+}
+
+void showFadingText(
+    const char* text,
+    ref bool buttonActivation,
+    ref int frameCountSinceButtonPress,
+    ref int speedTextFadeValue,
+    ref int frameDelay,
+    const ref int textFadeDelta,
+    const ref int textFadeThreshold)
+{
+    if (buttonActivation)
+    {
+        updateTextTransparency(frameCountSinceButtonPress,
+            speedTextFadeValue, frameDelay,
+            textFadeDelta, textFadeThreshold);
+
+        if (speedTextFadeValue > 0)
+        {
+            DrawTextPro(GetFontDefault(), text,
+                Vector2(GetScreenWidth() - 100, 10),
+                Vector2(0, 0),
+                0.0f, 20, 1, Color(255, 255, 255, cast(ubyte) speedTextFadeValue));
+        }
+    }
 }

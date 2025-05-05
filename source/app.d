@@ -27,6 +27,7 @@ void main()
 	bool updateTexture = true;
 	bool reverse = false;
 	bool pause = false;
+	bool play = false;
 	char* filePath;
 	char* filePathString = cast(char*) GC.calloc(char.sizeof * 200);
 
@@ -59,7 +60,7 @@ void main()
 				texture, filePath, filePathString);
 		}
 
-		pauseGif(pause, updateTexture, pauseTextFadeValue, playTextFadeValue);
+		pauseGif(pause, play, updateTexture, pauseTextFadeValue, playTextFadeValue);
 
 		if (IsKeyPressed(KeyboardKey.KEY_R))
 		{
@@ -95,67 +96,25 @@ void main()
 				//TODO: do arithmetic on ubyte to avoid cast
 			}
 
-			if (increaseSpeed)
-			{
-				updateTextTransparency(increaseSpeedFrameCount, increaseSpeedTextFadeValue, frameDelay,
-					textFadeDelta, textFadeThreshold);
+			showFadingText("Faster", increaseSpeed,
+				increaseSpeedFrameCount, increaseSpeedTextFadeValue, frameDelay,
+				textFadeDelta, textFadeThreshold);
 
-				if (increaseSpeedTextFadeValue > 0)
-				{
-					DrawTextPro(GetFontDefault(), "Faster!",
-						Vector2(GetScreenWidth() - 100, 10),
-						Vector2(0, 0),
-						0.0f, 20, 1, Color(255, 255, 255, cast(ubyte) increaseSpeedTextFadeValue));
-				}
-			}
+			showFadingText("Slower", decreaseSpeed,
+				decreaseSpeedFrameCount, decreaseSpeedTextFadeValue, frameDelay,
+				textFadeDelta, textFadeThreshold);
 
-			if (decreaseSpeed)
-			{
-				updateTextTransparency(decreaseSpeedFrameCount, decreaseSpeedTextFadeValue, frameDelay,
-					textFadeDelta, textFadeThreshold);
-				if (decreaseSpeedTextFadeValue > 0)
-				{
-					DrawTextPro(GetFontDefault(), "Slower!",
-						Vector2(GetScreenWidth() - 100, 10),
-						Vector2(0, 0),
-						0.0f, 20, 1, Color(255, 255, 255, cast(ubyte) decreaseSpeedTextFadeValue));
-				}
-			}
+			showFadingText("Paused", pause,
+				pauseFrameCounter, pauseTextFadeValue, frameDelay,
+				textFadeDelta, textFadeThreshold);
 
-			if (pause)
-			{
-				updateTextTransparency(pauseFrameCounter, pauseTextFadeValue, frameDelay, textFadeDelta, textFadeThreshold);
-				if (pauseTextFadeValue > 0)
-				{
-					DrawTextPro(GetFontDefault(), "Paused",
-						Vector2(GetScreenWidth() - 100, 10),
-						Vector2(0, 0),
-						0.0f, 20, 1, Color(255, 255, 255, cast(ubyte) pauseTextFadeValue));
-				}
-			}
-			else
-			{
-				updateTextTransparency(playFrameCounter, playTextFadeValue, frameDelay, textFadeDelta, textFadeThreshold);
-				if (playTextFadeValue > 0)
-				{
-					DrawTextPro(GetFontDefault(), "Play",
-						Vector2(GetScreenWidth() - 100, 10),
-						Vector2(0, 0),
-						0.0f, 20, 1, Color(255, 255, 255, cast(ubyte) playTextFadeValue));
-				}
-			}
+			showFadingText("Play", play,
+				playFrameCounter, playTextFadeValue, frameDelay,
+				textFadeDelta, textFadeThreshold);
 
-			if (reverse)
-			{
-				updateTextTransparency(reverseFrameCount, reverseTextFadeValue, frameDelay, textFadeDelta, textFadeThreshold);
-				if (reverseTextFadeValue > 0)
-				{
-					DrawTextPro(GetFontDefault(), "Reverse",
-						Vector2(GetScreenWidth() - 100, 10),
-						Vector2(0, 0),
-						0.0f, 20, 1, Color(255, 255, 255, cast(ubyte) reverseTextFadeValue));
-				}
-			}
+			showFadingText("Reverse", reverse,
+				reverseFrameCount, reverseTextFadeValue, frameDelay,
+				textFadeDelta, textFadeThreshold);
 
 		}
 		else
