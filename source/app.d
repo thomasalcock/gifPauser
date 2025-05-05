@@ -40,6 +40,8 @@ void main()
 
 	InitWindow(screenWidth, screenHeight, "gifPauser");
 	SetTargetFPS(60);
+	SetWindowState(ConfigFlags.FLAG_WINDOW_RESIZABLE);
+
 	while (!WindowShouldClose())
 	{
 		fileDropped = IsFileDropped();
