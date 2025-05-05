@@ -102,15 +102,29 @@ void drawInstructions()
             .RAYWHITE);
 }
 
-void changeGifSpeed(ref int frameDelay, const ref int MIN_FRAME_DELAY, const ref int MAX_FRAME_DELAY)
+void changeGifSpeed(ref int frameDelay,
+    ref bool increaseSpeed,
+    ref bool decreaseSpeed,
+    ref int increaseSpeedTextFadeValue,
+    ref int decreaseSpeedTextFadeValue,
+    const ref int MIN_FRAME_DELAY,
+    const ref int MAX_FRAME_DELAY)
 {
     if (IsKeyPressed(KeyboardKey.KEY_DOWN))
     {
         frameDelay++;
+        decreaseSpeed = true;
+        increaseSpeed = false;
+        decreaseSpeedTextFadeValue = 255;
+        increaseSpeedTextFadeValue = 0;
     }
     else if (IsKeyPressed(KeyboardKey.KEY_UP))
     {
         frameDelay--;
+        decreaseSpeed = false;
+        increaseSpeed = true;
+        decreaseSpeedTextFadeValue = 0;
+        increaseSpeedTextFadeValue = 255;
     }
     if (frameDelay > MAX_FRAME_DELAY)
     {

@@ -22,6 +22,8 @@ void main()
 	uint nextFrameDataOffset = 0;
 	int currentAnimFrame = 0;
 	int frameDelay = 11;
+	bool increaseSpeed = false;
+	bool decreaseSpeed = false;
 	int frameCounter = 0;
 	bool updateTexture = true;
 	bool reverse = false;
@@ -29,6 +31,10 @@ void main()
 	char* filePath;
 	char* filePathString = cast(char*) GC.calloc(char.sizeof * 200);
 
+	int increaseSpeedFrameCount = 0;
+	int increaseSpeedTextFadeValue = 0;
+	int decreaseSpeedFrameCount = 0;
+	int decreaseSpeedTextFadeValue = 0;
 	int playFrameCounter = 0;
 	int playTextFadeValue = 0;
 	int pauseTextFadeValue = 0;
@@ -65,7 +71,9 @@ void main()
 				reverse, nextFrameDataOffset, image, texture);
 		}
 
-		changeGifSpeed(frameDelay, MIN_FRAME_DELAY, MAX_FRAME_DELAY);
+		changeGifSpeed(frameDelay, increaseSpeed, decreaseSpeed,
+			increaseSpeedTextFadeValue, decreaseSpeedTextFadeValue,
+			MIN_FRAME_DELAY, MAX_FRAME_DELAY);
 
 		BeginDrawing();
 		ClearBackground(Colors.DARKGRAY);
@@ -76,8 +84,7 @@ void main()
 		{
 			DrawTexturePro(texture, source, dest, Vector2(0, 0), 0.0f, Colors.WHITE);
 			updateTextTransparency(frameCounter, fileTextFadeValue, frameDelay, textFadeDelta, textFadeThreshold);
-			if (
-				fileTextFadeValue > 0)
+			if (fileTextFadeValue > 0)
 			{
 				DrawTextPro(GetFontDefault(), TextFormat("Loaded file %s", filePathString),
 					Vector2(10, 10),
@@ -85,11 +92,41 @@ void main()
 					0.0f, 20, 1, Color(255, 255, 255, cast(ubyte) fileTextFadeValue));
 				//TODO: do arithmetic on ubyte to avoid cast
 			}
+
+			writeln(increaseSpeed);
+			writeln(increaseSpeedFrameCount);
+			if (increaseSpeed)
+			{
+				updateTextTransparency(increaseSpeedFrameCount, increaseSpeedTextFadeValue, frameDelay,
+					textFadeDelta, textFadeThreshold);
+
+				if (increaseSpeedTextFadeValue > 0)
+				{
+					DrawTextPro(GetFontDefault(), "Faster!",
+						Vector2(GetScreenWidth() - 100, 10),
+						Vector2(0, 0),
+						0.0f, 20, 1, Color(255, 255, 255, cast(ubyte) increaseSpeedTextFadeValue));
+				}
+
+			}
+
+			if (decreaseSpeed)
+			{
+				updateTextTransparency(decreaseSpeedFrameCount, decreaseSpeedTextFadeValue, frameDelay,
+					textFadeDelta, textFadeThreshold);
+				if (decreaseSpeedTextFadeValue > 0)
+				{
+					DrawTextPro(GetFontDefault(), "Slower!",
+						Vector2(GetScreenWidth() - 100, 10),
+						Vector2(0, 0),
+						0.0f, 20, 1, Color(255, 255, 255, cast(ubyte) decreaseSpeedTextFadeValue));
+				}
+			}
+
 			if (pause)
 			{
 				updateTextTransparency(pauseFrameCounter, pauseTextFadeValue, frameDelay, textFadeDelta, textFadeThreshold);
-				if (
-					pauseTextFadeValue > 0)
+				if (pauseTextFadeValue > 0)
 				{
 					DrawTextPro(GetFontDefault(), "Paused",
 						Vector2(GetScreenWidth() - 100, 10),
