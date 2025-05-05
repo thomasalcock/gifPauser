@@ -4,9 +4,8 @@ import raylib;
 import core.memory;
 import utils;
 
-// TODO: make window resizeable
-// TODO: allow user to iterate through single frames
 // TODO: allow user to save single file as 
+// TODO: allow user to iterate through single frames
 // TODO: display and fade out text / state when user changes input
 void main()
 {
@@ -31,6 +30,8 @@ void main()
 	char* filePath;
 	char* filePathString = cast(char*) GC.calloc(char.sizeof * 200);
 
+	int reverseFrameCount = 0;
+	int reverseTextFadeValue = 0;
 	int increaseSpeedFrameCount = 0;
 	int increaseSpeedTextFadeValue = 0;
 	int decreaseSpeedFrameCount = 0;
@@ -63,6 +64,7 @@ void main()
 		if (IsKeyPressed(KeyboardKey.KEY_R))
 		{
 			reverse = !reverse;
+			reverseTextFadeValue = 255;
 		}
 
 		if (updateTexture && fileCounter > 0)
@@ -93,8 +95,6 @@ void main()
 				//TODO: do arithmetic on ubyte to avoid cast
 			}
 
-			writeln(increaseSpeed);
-			writeln(increaseSpeedFrameCount);
 			if (increaseSpeed)
 			{
 				updateTextTransparency(increaseSpeedFrameCount, increaseSpeedTextFadeValue, frameDelay,
@@ -107,7 +107,6 @@ void main()
 						Vector2(0, 0),
 						0.0f, 20, 1, Color(255, 255, 255, cast(ubyte) increaseSpeedTextFadeValue));
 				}
-
 			}
 
 			if (decreaseSpeed)
@@ -148,11 +147,16 @@ void main()
 
 			if (reverse)
 			{
-				DrawTextPro(GetFontDefault(), "Reverse",
-					Vector2(GetScreenWidth() - 100, 50),
-					Vector2(0, 0),
-					0.0f, 20, 1, Color(255, 255, 255, 255));
+				updateTextTransparency(reverseFrameCount, reverseTextFadeValue, frameDelay, textFadeDelta, textFadeThreshold);
+				if (reverseTextFadeValue > 0)
+				{
+					DrawTextPro(GetFontDefault(), "Reverse",
+						Vector2(GetScreenWidth() - 100, 10),
+						Vector2(0, 0),
+						0.0f, 20, 1, Color(255, 255, 255, cast(ubyte) reverseTextFadeValue));
+				}
 			}
+
 		}
 		else
 		{
