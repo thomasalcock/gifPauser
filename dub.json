@@ -8,5 +8,8 @@
     "dependencies" : {"raylib-d" : "~>5.5.1"}, 
     "authors" : ["Thomas Alcock"], 
     "copyright" : "Copyright © 2025, Thomas Alcock", 
-    "license" : "BSL-1.0"
+    "license" : "BSL-1.0",
+    "targetName": "gifpauser",
+	"targetPath": "build",
+	"targetType": "executable"
 }

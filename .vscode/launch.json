@@ -6,7 +6,7 @@
             "request": "launch",
             "name": "Debug D project",
             "cwd": "${workspaceFolder}",
-            "program": "./gif-player",
+            "program": "./build/gifpauser",
             "preLaunchTask": "build"
         },
     ]
