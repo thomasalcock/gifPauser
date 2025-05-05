@@ -24,5 +24,6 @@ jobs:
 
     - name: 'Build'
       run: |
+        dub upgrade && dub run raylib-d:install
         dub build --compiler=dmd --build=release
 
